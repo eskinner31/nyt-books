@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var unirest = require('unirest');
 
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -31,8 +32,10 @@ app.use('/users', users);
 app.get('/books', function(req, res) {
     unirest.get('http://api.nytimes.com/svc/books/v3/lists/hardcover-fiction.json?api-key=' + process.env.NYT_API_KEY)
       .end(function (response) {
-        console.log(response.body);
-      res.redirect('/');  
+        var NYTBooks = response.body.results.books;
+        console.log(NYTBooks);
+        res.render('index',{books: NYTBooks})
+        //res.end('done')
       })
 })
 
